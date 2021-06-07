@@ -1,0 +1,63 @@
+buildscript {
+    ext {
+        springBootVersion = '2.4.4'
+        camundaSpringBootVersion = '7.15.0'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id 'java'
+    id "org.springframework.boot" version "${springBootVersion}"
+    id "io.spring.dependency-management" version "1.0.1.RELEASE"
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+
+    /*imports {
+        mavenBom 'org.camunda.bpm.extension.springboot:camunda-bpm-spring-boot-starter-bom:2.0.0'
+    }*/
+
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
+    }
+   imports {
+        mavenBom "org.camunda.bpm:camunda-bom:$camundaSpringBootVersion"
+    }
+}
+dependencies {
+    compile group: 'org.camunda.bpm.springboot', name: 'camunda-bpm-spring-boot-starter', version: "${camundaSpringBootVersion}"
+    compile group: 'org.camunda.bpm.springboot', name: 'camunda-bpm-spring-boot-starter-webapp', version: "${camundaSpringBootVersion}"
+    compile group: 'org.camunda.bpm.springboot', name: 'camunda-bpm-spring-boot-starter-rest', version: "${camundaSpringBootVersion}"
+    compile group: 'org.camunda.bpm.springboot', name: 'camunda-bpm-spring-boot-starter-test', version: "${camundaSpringBootVersion}"
+    compile 'com.sun.xml.bind:jaxb-impl:2.2.3'
+    compile 'com.h2database:h2:1.4.199'
+    compile "org.springframework.boot:spring-boot-starter-jdbc:$springBootVersion"
+    compileOnly 'org.camunda.spin:camunda-spin-dataformat-all:1.10.0'
+    compileOnly "org.camunda.bpm:camunda-engine-plugin-spin:${camundaSpringBootVersion}"
+    //compile group: 'org.camunda.bpm', name: 'camunda-engine-plugin-spin', version: "${camundaSpringBootVersion}"
+    testCompile  'org.camunda.bpm.extension:camunda-bpm-assert-scenario:0.2'
+    testCompile  'org.camunda.bpm.extension:camunda-bpm-process-test-coverage:0.3.2'
+    testCompile  'org.camunda.bpm.extension.mockito:camunda-bpm-mockito:4.13.0'
+    testCompile  'org.slf4j:jul-to-slf4j'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+}
+
+test {
+    useJUnitPlatform()
+}
